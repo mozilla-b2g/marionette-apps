@@ -1,5 +1,5 @@
 
-var Apps = require('../index');
+var Apps = require(__dirname + '/../index');
 
 
 suite('App', function() {
