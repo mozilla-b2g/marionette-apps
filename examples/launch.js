@@ -5,7 +5,7 @@
  *     to get a list of the installed apps and launch one.
  */
 
-var Apps = require('../lib/apps'),
+var Apps = require('marionette-apps'),
     Host = require('marionette-host-environment'),
     Marionette = require('marionette-client'),
     path = require('path');
