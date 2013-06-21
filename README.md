@@ -2,7 +2,7 @@
 # Marionette Apps
 
 [![Build
-Status](https://travis-ci.org/gaye/marionette-apps.png)](https://travis-ci.org/gaye/marionette-apps)
+Status](https://travis-ci.org/gaye/marionette-apps.png?branch=master)](https://travis-ci.org/gaye/marionette-apps)
 
 ## Getting Started
 
