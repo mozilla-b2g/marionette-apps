@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "marionette-apps": "0.0.1",
-    "marionette-client": "0.5.6",
+    "marionette-client": "0.6.0",
     "marionette-js-logger": "0.0.2"
   },
   "devDependencies": {
