@@ -14,7 +14,7 @@ lint:
 
 .PHONY: test
 test:
-	mocha --colors --recursive \
+	./node_modules/mocha/bin/mocha --colors --recursive \
 		--require test/test_helper.js \
 		--reporter spec \
 		--timeout 100s \
