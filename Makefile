@@ -1,8 +1,6 @@
 
 .PHONY: build
-build: lint
-	Xvfb :99 &
-	DISPLAY=:99 make test
+build: lint test
 
 
 .PHONY: lint
