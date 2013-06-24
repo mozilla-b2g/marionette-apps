@@ -20,7 +20,7 @@ suite('mgmt', function() {
         subject = apps.mgmt;
         done();
       });
-    });
+    }, this);
   });
 
   teardown(function(done) {

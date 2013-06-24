@@ -1,5 +1,6 @@
 
-var Apps = require(__dirname + '/../index');
+var Apps = require(__dirname + '/../index'),
+    BootWatcher = require(__dirname + '/../lib/bootwatcher');
 
 
 suite('App', function() {
@@ -18,7 +19,7 @@ suite('App', function() {
         apps = result;
         done();
       });
-    });
+    }, this);
   });
 
   teardown(function(done) {
@@ -29,18 +30,39 @@ suite('App', function() {
   });
 
   suite('#launch', function() {
+    var CALENDAR_URL = 'app://calendar.gaiamobile.org';
     setup(function(done) {
       apps.mgmt.getAll().onsuccess = function(evt) {
-        subject = evt.target.result[0];
-        subject.launch();
-        done();
+        var result = evt.target.result;
+        for (var i = 0; i < result.length; i++) {
+          var app = result[i];
+          if (app.origin === CALENDAR_URL) {
+            subject = app;
+            subject.launch();
+            done();
+          }
+        }
       };
     });
 
     test('should launch the appropriate app', function(done) {
-      // TODO(gareth): Check that the app is launched and that we've
-      // switched context appropriately.
-      done();
+      /**
+       * @param {string} app src for app.
+       */
+      function checkForApp(app) {
+        var selector = 'iframe[src="' + app + '"]';
+        client
+            .setSearchTimeout(BootWatcher.WAIT_TIME)
+            .findElement(selector, function(err, result) {
+              assert.notEqual(result.id, undefined);
+              done();
+            });
+      }
+
+      if (client.context !== 'content') {
+        client.setContext('content');
+      }
+      checkForApp(CALENDAR_URL + '/index.html');
     });
   });
 });

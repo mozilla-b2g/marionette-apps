@@ -12,7 +12,7 @@ suite('Apps', function() {
       b2g = childProcess;
       done();
     });
-  });
+  }, this);
 
   teardown(function(done) {
     client.deleteSession(function() {
