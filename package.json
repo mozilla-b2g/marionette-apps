@@ -6,7 +6,6 @@
     "email": "gaye@mozilla.com"
   },
   "dependencies": {
-    "marionette-apps": "0.0.2",
     "marionette-client": "0.7.0",
     "marionette-js-logger": "0.0.2"
   },

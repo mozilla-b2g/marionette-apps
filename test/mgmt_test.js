@@ -31,6 +31,8 @@ suite('mgmt', function() {
   });
 
   suite('#getAll', function() {
+    var context;
+
     test('should return an array of app objects', function(done) {
       subject.getAll().onsuccess = function(evt) {
         // TODO(gareth): Check that the app is launched and that we've
@@ -49,6 +51,13 @@ suite('mgmt', function() {
         });
 
         done();
+      };
+    });
+
+    test('should not change client context', function() {
+      context = client.context;
+      subject.getAll().onsuccess = function(evt) {
+        assert.strictEqual(client.context, context);
       };
     });
   });

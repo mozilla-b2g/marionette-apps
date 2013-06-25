@@ -30,6 +30,8 @@ suite('App', function() {
   });
 
   suite('#launch', function() {
+    var context;
+
     var CALENDAR_URL = 'app://calendar.gaiamobile.org';
     setup(function(done) {
       apps.mgmt.getAll().onsuccess = function(evt) {
@@ -38,6 +40,7 @@ suite('App', function() {
           var app = result[i];
           if (app.origin === CALENDAR_URL) {
             subject = app;
+            context = client.context;
             subject.launch();
             done();
           }
@@ -63,6 +66,10 @@ suite('App', function() {
         client.setContext('content');
       }
       checkForApp(CALENDAR_URL + '/index.html');
+    });
+
+    test('should not change client context', function() {
+      assert.strictEqual(client.context, context);
     });
   });
 });

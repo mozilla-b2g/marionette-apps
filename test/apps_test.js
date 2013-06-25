@@ -22,10 +22,10 @@ suite('Apps', function() {
   });
 
   suite('#setup', function() {
-    var apps, spy;
+    var apps, context;
 
     setup(function(done) {
-      spy = sinon.spy(client, 'setContext');
+      context = client.context;
       Apps.setup(client, function(err, result) {
         if (err) {
           done(err);
@@ -36,15 +36,13 @@ suite('Apps', function() {
       });
     });
 
-
-    test('should setContext chrome', function() {
-      sinon.assert.calledOnce(spy);
-      sinon.assert.calledWith(spy, 'chrome');
-    });
-
     test('should return an App with a _client', function() {
       assert.ok(apps instanceof Apps);
       assert.strictEqual(apps._client, client);
+    });
+
+    test('should not change client context', function() {
+      assert.strictEqual(client.context, context);
     });
   });
 });
