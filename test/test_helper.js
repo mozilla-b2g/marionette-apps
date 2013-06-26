@@ -20,7 +20,7 @@ global.B2G_PATH = path.resolve(__dirname, '../b2g');
 global.Helper = {
   /**
    * Spawn a b2g instance and connect to its marionette server.
-   * @param {Function=} context Optional calling test context.
+   * @param {Function} context Optional calling test context.
    * @param {Function} cb Some function to call when we finish.
    */
   spawn: function(cb, context) {
