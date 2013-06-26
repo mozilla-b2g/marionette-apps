@@ -1,17 +1,16 @@
 {
   "name": "marionette-apps",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": {
     "name": "Gareth Aye",
     "email": "gaye@mozilla.com"
   },
   "dependencies": {
-    "marionette-apps": "0.0.2",
-    "marionette-client": "0.6.0",
+    "marionette-client": "0.7.0",
     "marionette-js-logger": "0.0.2"
   },
   "devDependencies": {
-    "marionette-host-environment": "0.0.2",
+    "marionette-host-environment": "0.3.0",
     "mocha": "1.11.0",
     "sinon": "1.7.2"
   },
