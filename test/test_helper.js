@@ -20,11 +20,21 @@ global.B2G_PATH = path.resolve(__dirname, '../b2g');
 global.Helper = {
   /**
    * Spawn a b2g instance and connect to its marionette server.
-   * @param {Function} context Optional calling test context.
+   *
+   * Options:
+   *  - (Boolean) sync: when true uses sync driver.
+   *
+   * @param {Object} options for spawn.
    * @param {Function} cb Some function to call when we finish.
    */
-  spawn: function(cb, context) {
+  spawn: function(spawnOpts, cb) {
+    if (typeof spawnOpts === 'function') {
+      cb = spawnOpts;
+      spawnOpts = {};
+    }
+
     var options = {
+      port: 60044,
       settings: {
         'ftu.manifestURL': null,
         'lockscreen.enabled': false
@@ -40,28 +50,44 @@ global.Helper = {
         childProcess.stdout.pipe(process.stdout);
       }
 
-      var driver = new Marionette.Drivers.Tcp({ port: port });
+      var driver;
+      if (spawnOpts.sync) {
+        driver = new Marionette.Drivers.HttpProxy({ marionettePort: port });
+      } else {
+        driver = new Marionette.Drivers.Tcp({ port: port });
+      }
+
       driver.connect(function() {
         client = new Marionette.Client(driver);
-
-        BootWatcher.setup(client, function(err, bootwatcher) {
-          if (err) {
-            throw err;
-          }
-
-          /**
-           * @param {Event} evt BootWatcher.EventType.BOOT event.
-           */
-          function onBoot(evt) {
-            bootwatcher.removeListener(BootWatcher.EventType.BOOT, onBoot);
-            cb(client, childProcess);
-          }
-
-          bootwatcher.addListener(BootWatcher.EventType.BOOT, onBoot);
-          client.startSession(function() {
-            bootwatcher.start();
-          });
+        client.startSession(function() {
+          cb(client, childProcess);
         });
+      });
+    });
+  },
+
+  /**
+   * Sets up the plugin.
+   *
+   *    Helper.setup(function(client, process, apps) {
+   *
+   *    });
+   *
+   *
+   * @param {Object} options see #spawn.
+   * @param {Function} callback see above.
+   */
+  setup: function(opts, callback) {
+    if (typeof opts === 'function') {
+      callback = opts;
+      opts = {};
+    }
+
+    var Apps = require('../lib/apps');
+    this.spawn(opts, function(client, process) {
+      Apps.setup(client, function(err, apps) {
+        if (err) throw err;
+        callback(client, process, apps);
       });
     });
   }
