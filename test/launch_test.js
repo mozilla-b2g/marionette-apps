@@ -4,20 +4,14 @@ suite('launch', function() {
       launch = require('../lib/launch').launch;
 
   var apps, client, b2g;
-  setup(function(done) {
-    Helper.setup(function(_client, _child, _apps) {
-      client = _client;
-      b2g = _child;
-      apps = _apps;
-      done();
-    });
-  }, this);
+  Helper.client({
+    plugins: {
+      mozApps: require('../lib/apps')
+    }
+  });
 
-  teardown(function(done) {
-    client.deleteSession(function() {
-      b2g.kill();
-      done();
-    });
+  setup(function() {
+    client = this.client;
   });
 
   suite('launch installed app', function() {
@@ -25,7 +19,7 @@ suite('launch', function() {
     var origin = 'app://' + domain;
     setup(function(done) {
       this.timeout('20s');
-      launch(apps, origin, done);
+      launch(this.client.mozApps, origin, done);
     });
 
     // find iframe

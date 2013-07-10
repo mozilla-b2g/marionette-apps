@@ -1,22 +1,16 @@
+var App = require('../lib/app');
+
 suite('public interface', function() {
   // requires
-  var marionetteApps = require('../index');
-  var App = require('../lib/app');
-
   var apps, client, b2g;
-  setup(function(done) {
-    Helper.spawn(function(_client, _child) {
-      client = _client;
-      b2g = _child;
-      apps = marionetteApps.setup(client, {}, done);
-    });
+  Helper.client({
+    plugins: {
+      apps: require('../index')
+    }
   });
 
-  teardown(function(done) {
-    client.deleteSession(function() {
-      b2g.kill();
-      done();
-    });
+  setup(function() {
+    client = this.client;
   });
 
   suite('after launching app', function() {
@@ -24,7 +18,7 @@ suite('public interface', function() {
         selector = 'iframe[src*="calendar"]';
 
     setup(function(done) {
-      apps.launch(appOrigin, done);
+      client.apps.launch(appOrigin, done);
     });
 
     test('it has element', function(done) {
@@ -34,7 +28,7 @@ suite('public interface', function() {
 
     suite('#switchToApp', function() {
       setup(function(done) {
-        apps.switchToApp(appOrigin, done);
+        client.apps.switchToApp(appOrigin, done);
       });
 
       test('it should be inside app', function(done) {
@@ -48,7 +42,7 @@ suite('public interface', function() {
 
     suite('#close', function() {
       setup(function(done) {
-        apps.close(appOrigin, done);
+        client.apps.close(appOrigin, done);
       });
 
       test('app iframe should be missing', function(done) {
@@ -65,7 +59,7 @@ suite('public interface', function() {
     var allApps;
 
     setup(function(done) {
-      apps.list(function(err, _allApps) {
+      client.apps.list(function(err, _allApps) {
         allApps = _allApps;
         done();
       });

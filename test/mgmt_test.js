@@ -6,28 +6,15 @@ var App = require(__dirname + '/../lib/app'),
 suite('mgmt', function() {
   var apps, b2g, client, subject;
 
-  setup(function(done) {
-    Helper.spawn(function(marionetteClient, childProcess) {
-      client = marionetteClient;
-      b2g = childProcess;
-
-      Apps.setup(client, function(err, result) {
-        if (err) {
-          throw err;
-        }
-
-        apps = result;
-        subject = apps.mgmt;
-        done();
-      });
-    }, this);
+  Helper.client({
+    plugins: {
+      mozApps: require('../lib/apps')
+    }
   });
 
-  teardown(function(done) {
-    client.deleteSession(function() {
-      b2g.kill();
-      done();
-    });
+  setup(function() {
+    client = this.client;
+    subject = client.mozApps.mgmt;
   });
 
   suite('#getAll', function() {

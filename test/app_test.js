@@ -1,32 +1,16 @@
-
-var Apps = require(__dirname + '/../index'),
-    BootWatcher = require(__dirname + '/../lib/bootwatcher');
-
+var BootWatcher = require('../lib/bootwatcher');
 
 suite('App', function() {
-  var apps, b2g, client, subject;
+  var client, subject;
 
-  setup(function(done) {
-    Helper.spawn(function(marionetteClient, childProcess) {
-      client = marionetteClient;
-      b2g = childProcess;
-
-      Apps.setup(client, function(err, result) {
-        if (err) {
-          throw err;
-        }
-
-        apps = result;
-        done();
-      });
-    }, this);
+  Helper.client({
+    plugins: {
+      mozApps: require('../lib/apps')
+    }
   });
 
-  teardown(function(done) {
-    client.deleteSession(function() {
-      b2g.kill();
-      done();
-    });
+  setup(function() {
+    client = this.client;
   });
 
   suite('#launch', function() {
@@ -34,7 +18,7 @@ suite('App', function() {
 
     var CALENDAR_URL = 'app://calendar.gaiamobile.org';
     setup(function(done) {
-      apps.mgmt.getAll().onsuccess = function(evt) {
+      client.mozApps.mgmt.getAll().onsuccess = function(evt) {
         var result = evt.target.result;
         for (var i = 0; i < result.length; i++) {
           var app = result[i];

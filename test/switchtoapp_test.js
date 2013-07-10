@@ -3,28 +3,22 @@ suite('launch', function() {
   var Apps = require('../lib/apps'),
       switchToApp = require('../lib/switchtoapp').switchToApp;
 
-  var apps, client, b2g;
-  setup(function(done) {
-    Helper.setup(function(_client, _child, _apps) {
-      client = _client;
-      b2g = _child;
-      apps = _apps;
-      done();
-    });
-  }, this);
+  var apps, client;
+  Helper.client({
+    plugins: {
+      mozApps: require('../lib/apps')
+    }
+  });
 
-  teardown(function(done) {
-    client.deleteSession(function() {
-      b2g.kill();
-      done();
-    });
+  setup(function() {
+    client = this.client;
   });
 
   suite('switch to running app', function() {
     var domain = 'homescreen.gaiamobile.org';
     var origin = 'app://' + domain;
     setup(function(done) {
-      switchToApp(apps, origin, done);
+      switchToApp(client.mozApps, origin, done);
     });
 
     test('should be visible', function(done) {
