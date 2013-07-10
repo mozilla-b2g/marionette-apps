@@ -1,6 +1,4 @@
-
-var Apps = require(__dirname + '/../index');
-
+var Apps = require('../lib/apps');
 
 suite('Apps', function() {
   var b2g, client, subject;
