@@ -1,6 +1,4 @@
-
 var fs = require('fs');
-
 
 suite('ObjectCache', function() {
   var ObjectCache, script, window;

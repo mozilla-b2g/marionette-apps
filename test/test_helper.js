@@ -16,8 +16,43 @@ global.sinon = require('sinon');
  */
 global.B2G_PATH = path.resolve(__dirname, '../b2g');
 
-
 global.Helper = {
+  /**
+   * Creates the marionette client given some options.
+   *
+   *    suite('my test', function() {
+   *      Helper.client({
+   *        plugins: {
+   *          'apps': require('apps')
+   *        }
+   *      });
+   *
+   *      test('apps', function() {
+   *        this.client.apps = xx;
+   *      });
+   *    });
+   *
+   *
+   */
+  client: function(options) {
+    var b2g;
+
+    setup(function(done) {
+      Helper.spawn(options, function(client, child) {
+        b2g = child;
+        this.client = client;
+        done();
+      }.bind(this));
+    });
+
+    teardown(function(done) {
+      this.client.deleteSession(function() {
+        b2g.kill();
+        done();
+      });
+    });
+  },
+
   /**
    * Spawn a b2g instance and connect to its marionette server.
    *
@@ -34,7 +69,6 @@ global.Helper = {
     }
 
     var options = {
-      port: 60044,
       settings: {
         'ftu.manifestURL': null,
         'lockscreen.enabled': false
@@ -59,6 +93,13 @@ global.Helper = {
 
       driver.connect(function() {
         client = new Marionette.Client(driver);
+
+        if (spawnOpts && spawnOpts.plugins) {
+          for (var key in spawnOpts.plugins) {
+            client.plugin(key, spawnOpts.plugins[key]);
+          }
+        }
+
         client.startSession(function() {
           cb(client, childProcess);
         });
@@ -85,10 +126,8 @@ global.Helper = {
 
     var Apps = require('../lib/apps');
     this.spawn(opts, function(client, process) {
-      Apps.setup(client, function(err, apps) {
-        if (err) throw err;
-        callback(client, process, apps);
-      });
+      client.plugin('appsCore', Apps);
+      callback(client, process);
     });
   }
 };

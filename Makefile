@@ -1,7 +1,5 @@
-
-.PHONY: build
-build: lint test
-
+.PHONY: default
+default: lint test
 
 .PHONY: lint
 lint:
@@ -9,11 +7,6 @@ lint:
 		--disable "220,225" \
 		--exclude_directories "b2g,examples,node_modules"
 
-
 .PHONY: test
 test:
-	./node_modules/mocha/bin/mocha --colors --recursive \
-		--require test/test_helper.js \
-		--reporter spec \
-		--timeout 100s \
-		--ui tdd
+	./node_modules/.bin/mocha

@@ -1,46 +1,24 @@
 var Apps = require('../lib/apps');
 
 suite('Apps', function() {
-  var b2g, client, subject;
+  var client, subject;
 
-  setup(function(done) {
-    Helper.spawn(function(marionetteClient, childProcess) {
-      subject = Apps;
-      client = marionetteClient;
-      b2g = childProcess;
-      done();
-    });
-  }, this);
+  Helper.client({
+    plugins: {
+      mozApps: require('../lib/apps')
+    }
+  });
 
-  teardown(function(done) {
-    client.deleteSession(function() {
-      b2g.kill();
-      done();
-    });
+  setup(function() {
+    client = this.client;
   });
 
   suite('#setup', function() {
-    var apps, context;
-
-    setup(function(done) {
-      context = client.context;
-      Apps.setup(client, function(err, result) {
-        if (err) {
-          done(err);
-        }
-
-        apps = result;
-        done();
-      });
-    });
+    var apps;
 
     test('should return an App with a _client', function() {
-      assert.ok(apps instanceof Apps);
-      assert.strictEqual(apps._client, client);
-    });
-
-    test('should not change client context', function() {
-      assert.strictEqual(client.context, context);
+      assert.ok(client.mozApps instanceof Apps);
+      assert.strictEqual(client.mozApps._client, client);
     });
   });
 });

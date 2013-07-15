@@ -1,4 +1,3 @@
-
 before_install:
   - "sudo easy_install http://closure-linter.googlecode.com/files/closure_linter-latest.tar.gz"
 before_script:
@@ -7,4 +6,4 @@ before_script:
 language: node_js
 node_js:
   - "0.8"
-script: "make build"
+  - "0.10"
