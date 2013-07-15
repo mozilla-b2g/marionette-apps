@@ -1,4 +1,4 @@
-
 /b2g
 /node_modules
 /npm-debug.log
+.DS_Store
