@@ -21,8 +21,8 @@ function MarionetteApps(apps) {
   }
 }
 
-function setup(client, options, callback) {
-  var apps = Apps.setup(client, options, callback);
+function setup(client, options) {
+  var apps = Apps.setup(client, options);
 
   // return public interface
   return new MarionetteApps(apps);

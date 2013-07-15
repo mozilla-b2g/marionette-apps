@@ -4,20 +4,14 @@ suite('waitforapp', function() {
       waitForApp = require('../lib/waitforapp').waitForApp;
 
   var apps, client, b2g;
-  setup(function(done) {
-    Helper.setup(function(_client, _child, _apps) {
-      client = _client;
-      b2g = _child;
-      apps = _apps;
-      done();
-    });
-  }, this);
+  Helper.client({
+    plugins: {
+      mozApps: require('../lib/apps')
+    }
+  });
 
-  teardown(function(done) {
-    client.deleteSession(function() {
-      b2g.kill();
-      done();
-    });
+  setup(function() {
+    client = this.client;
   });
 
   suite('waiting for running app', function() {
@@ -27,7 +21,7 @@ suite('waitforapp', function() {
 
     setup(function(done) {
       this.timeout('10s');
-      waitForApp(apps, domain, function(err, el) {
+      waitForApp(client.mozApps, domain, function(err, el) {
         if (err) return done(err);
         element = el;
         done();

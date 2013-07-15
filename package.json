@@ -7,11 +7,11 @@
   },
 
   "peerDependencies": {
-    "marionette-client": ">=0.8.0-alpha.1"
+    "marionette-client": ">=0.9.0"
   },
 
   "devDependencies": {
-    "marionette-client": "0.8.0-alpha.1",
+    "marionette-client": "0.9.0",
     "marionette-js-logger": "0.0.2",
     "marionette-host-environment": "0.3.3",
     "mocha": "1.11.0",
@@ -25,6 +25,9 @@
     "mozilla",
     "test"
   ],
+  "scripts": {
+    "test": "make"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",

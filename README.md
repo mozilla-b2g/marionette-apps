@@ -16,11 +16,40 @@ Status](https://travis-ci.org/gaye/marionette-apps.png?branch=master)](https://t
     npm install
     examples/launch.js
 
+## Usage
+
+```js
+// create the plugin. Must come _before_ startSession
+client.plugin('apps', require('marionette-apps'));
+
+client.startSession(function() {
+  // launch the app
+  client.apps.launch('app://myorigin.com', function(err) {
+  });
+
+  // close a running application
+  client.apps.close('app://myorigin.com', function(err) {
+  });
+
+  // switch to the iframe of a given app origin  should run after launch
+  client.apps.switchToApp('app://myorigin.com', function() {
+  });
+
+
+  // find all apps
+  client.apps.list(function(err, apps) {
+   // an array of apps see lib/app.js
+  });
+});
+
+
+```
+
 ## License
 
 Copyright (c) 2013 Mozilla Foundation
 
-Contributors: Gareth Aye <gaye@mozilla.com>
+Contributors: Gareth Aye <gaye@mozilla.com>, James Lal <jlal@mozilla.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
