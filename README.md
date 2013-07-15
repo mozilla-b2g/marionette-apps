@@ -4,7 +4,7 @@
 A node library that manages Firefox OS applications through Marionette.
 
 [![Build
-Status](https://travis-ci.org/gaye/marionette-apps.png?branch=master)](https://travis-ci.org/gaye/marionette-apps)
+Status](https://travis-ci.org/mozilla-b2g/marionette-apps.png?branch=master)](https://travis-ci.org/mozilla-b2g/marionette-apps)
 
 ## Prerequisites
 
