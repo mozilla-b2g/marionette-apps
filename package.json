@@ -1,22 +1,19 @@
 {
   "name": "marionette-apps",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "Gareth Aye",
     "email": "gaye@mozilla.com"
   },
 
-  "peerDependencies": {
-    "marionette-client": ">=0.9.0"
-  },
-
   "devDependencies": {
-    "marionette-client": "0.9.0",
-    "marionette-js-logger": "0.0.2",
+    "marionette-client": "0.10.0",
     "marionette-host-environment": "0.3.3",
+    "marionette-js-logger": "0.0.2",
     "mocha": "1.11.0",
     "sinon": "1.7.2"
   },
+
   "keywords": [
     "firefox",
     "firefox os",
@@ -25,10 +22,13 @@
     "mozilla",
     "test"
   ],
+
   "scripts": {
     "test": "make"
   },
+
   "license": "MIT",
+
   "repository": {
     "type": "git",
     "url": "https://github.com/mozilla-b2g/marionette-apps.git"
