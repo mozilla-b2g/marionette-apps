@@ -1,4 +1,3 @@
-
 var App = require(__dirname + '/../lib/app'),
     Apps = require(__dirname + '/../index');
 
@@ -9,7 +8,8 @@ suite('mgmt', function() {
   Helper.client({
     plugins: {
       mozApps: require('../lib/apps')
-    }
+    },
+    sync: process.env.SYNC
   });
 
   setup(function() {
@@ -21,7 +21,7 @@ suite('mgmt', function() {
     var context;
 
     test('should return an array of app objects', function(done) {
-      subject.getAll().onsuccess = function(evt) {
+      var onsuccess = function(evt) {
         // TODO(gareth): Check that the app is launched and that we've
         // switched context appropriately.
         assert.ok(evt.target.result.length > 0);
@@ -39,13 +39,17 @@ suite('mgmt', function() {
 
         done();
       };
+
+      subject.getAll(null, onsuccess);
     });
 
     test('should not change client context', function() {
       context = client.context;
-      subject.getAll().onsuccess = function(evt) {
+      var onsuccess = function(evt) {
         assert.strictEqual(client.context, context);
       };
+
+      subject.getAll(null, onsuccess);
     });
   });
 });

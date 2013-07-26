@@ -4,7 +4,6 @@
  * @fileoverview An example that shows how to use the MarionetteApps plugin
  *     to get a list of the installed apps and launch one.
  */
-
 var Host = require('marionette-host-environment'),
     Marionette = require('marionette-client'),
     path = require('path');
@@ -55,7 +54,7 @@ Host.spawn(B2G_PATH, OPTIONS, function(err, port, childProcess) {
   }
 
   // Connect to the marionette server.
-  var driver = new Marionette.Drivers.Tcp({ port: port });
+  var driver = new Marionette.Drivers.TcpSync({ port: port });
   driver.connect(function() {
     // Wrap the marionette connection with a client that we can pass
     // to our plugin.

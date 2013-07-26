@@ -1,42 +1,48 @@
-suite('list', function() {
-  var list = require('../lib/list').list;
+var list = require('../lib/list').list;
 
-  var response,
-      appsMock = {};
+
+suite('list', function() {
+  var mockApps, simulateError;
+  var expected = ['Not', 'an', 'ambi', 'turner'];
+  var expectedError = {
+    msg: 'trollololololol'
+  };
+
   setup(function() {
-    response = {};
-    appsMock.mgmt = {};
-    appsMock.mgmt.getAll = function() {
-      return response;
+    mockApps = {};
+    mockApps.mgmt = {};
+    mockApps.mgmt.getAll = function(onerror, onsuccess) {
+      if (simulateError) {
+        onerror && onerror({
+          target: {
+            error: expectedError
+          }
+        });
+      } else {
+        onsuccess && onsuccess({
+          target: {
+            result: expected
+          }
+        });
+      }
     };
   });
 
-  test('success', function(done) {
-    var result = [];
-
-    list(appsMock, function(err, list) {
-      assert.ok(!err, 'error');
-      assert.equal(list, result, 'apps');
+  test('onsuccess', function(done) {
+    simulateError = false;
+    list(mockApps, function(err, result) {
+      assert.ok(!err);
+      assert.deepEqual(result, expected);
       done();
-    });
-
-    response.onsuccess({
-      target: {
-        result: result
-      }
     });
   });
 
-  test('error', function(done) {
-    var error = new Error();
-    list(appsMock, function(givenErr) {
-      assert.equal(givenErr, error, 'error');
+  test('onerror', function(done) {
+    simulateError = true;
+    list(mockApps, function(err, result) {
+      assert.ok(err);
+      assert.deepEqual(err, expectedError);
       done();
-    });
-    response.onerror({
-      target: {
-        error: error
-      }
     });
   });
 });

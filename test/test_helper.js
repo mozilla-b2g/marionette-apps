@@ -1,12 +1,11 @@
-
 var BootWatcher = require(__dirname + '/../lib/bootwatcher'),
     Host = require('marionette-host-environment'),
     Marionette = require('marionette-client');
 
 
-global.assert = require('assert'),
-global.fs = require('fs'),
-global.path = require('path'),
+global.assert = require('assert');
+global.fs = require('fs');
+global.path = require('path');
 global.sinon = require('sinon');
 
 
@@ -15,6 +14,7 @@ global.sinon = require('sinon');
  * @const {string}
  */
 global.B2G_PATH = path.resolve(__dirname, '../b2g');
+
 
 global.Helper = {
   /**
@@ -31,8 +31,6 @@ global.Helper = {
    *        this.client.apps = xx;
    *      });
    *    });
-   *
-   *
    */
   client: function(options) {
     var b2g;
@@ -52,6 +50,7 @@ global.Helper = {
       });
     });
   },
+
 
   /**
    * Spawn a b2g instance and connect to its marionette server.
@@ -84,13 +83,9 @@ global.Helper = {
         childProcess.stdout.pipe(process.stdout);
       }
 
-      var driver;
-      if (spawnOpts.sync) {
-        driver = new Marionette.Drivers.HttpProxy({ marionettePort: port });
-      } else {
-        driver = new Marionette.Drivers.Tcp({ port: port });
-      }
-
+      var driverClass = spawnOpts.sync ?
+          Marionette.Drivers.TcpSync : Marionette.Drivers.Tcp;
+      var driver = new driverClass({ port: port });
       driver.connect(function() {
         client = new Marionette.Client(driver);
 
@@ -107,13 +102,13 @@ global.Helper = {
     });
   },
 
+
   /**
    * Sets up the plugin.
    *
    *    Helper.setup(function(client, process, apps) {
    *
    *    });
-   *
    *
    * @param {Object} options see #spawn.
    * @param {Function} callback see above.
