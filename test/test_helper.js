@@ -83,7 +83,7 @@ global.Helper = {
         childProcess.stdout.pipe(process.stdout);
       }
 
-      var driverClass = spawnOpts.sync ?
+      var driverClass = process.env.SYNC ?
           Marionette.Drivers.TcpSync : Marionette.Drivers.Tcp;
       var driver = new driverClass({ port: port });
       driver.connect(function() {

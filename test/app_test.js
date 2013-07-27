@@ -6,8 +6,7 @@ suite('App', function() {
   Helper.client({
     plugins: {
       mozApps: require('../lib/apps')
-    },
-    sync: process.env.SYNC
+    }
   });
 
   setup(function() {

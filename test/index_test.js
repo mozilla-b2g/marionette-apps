@@ -6,8 +6,7 @@ suite('public interface', function() {
   Helper.client({
     plugins: {
       apps: require('../index')
-    },
-    sync: process.env.SYNC
+    }
   });
 
   setup(function() {
