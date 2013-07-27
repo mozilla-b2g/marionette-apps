@@ -56,7 +56,7 @@ suite('public interface', function() {
     });
   });
 
-  suite('#all', function() {
+  suite('#list', function() {
     var allApps;
 
     setup(function(done) {
