@@ -48,11 +48,11 @@ suite('App', function() {
           done();
         } else {
           client
-              .setSearchTimeout(BootWatcher.WAIT_TIME)
-              .findElement(selector, function(err, result) {
-                assert.notEqual(result.id, undefined);
-                done();
-              });
+            .setSearchTimeout(BootWatcher.WAIT_TIME)
+            .findElement(selector, function(err, result) {
+              assert.notEqual(result.id, undefined);
+              done();
+            });
         }
       }
 
