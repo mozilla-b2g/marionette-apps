@@ -13,70 +13,116 @@ suite('public interface', function() {
     client = this.client;
   });
 
-  suite('after launching app', function() {
-    var appOrigin = 'app://calendar.gaiamobile.org',
-        selector = 'iframe[src*="calendar"]';
+  suite('#launch', function() {
+    var appOrigin = 'app://calendar.gaiamobile.org';
+    var selector = 'iframe[src*="calendar"]';
 
     setup(function(done) {
-      client.apps.launch(appOrigin, done);
+      if (client.isSync) {
+        client.apps.launch(appOrigin);
+        done();
+      } else {
+        client.apps.launch(appOrigin, done);
+      }
     });
 
-    test('it has element', function(done) {
-      client.scope({ searchTimeout: 1000 }).
-             findElement(selector, done);
+    test('should create the appropriate app iframe', function(done) {
+      function checkElement(err, el) {
+        assert.ok(!err);
+        assert.ok(!!el);
+        done();
+      }
+
+      client.scope({ searchTimeout: 1000 });
+      if (client.isSync) {
+        var el = client.findElement(selector);
+        checkElement(null, el);
+      } else {
+        client.findElement(selector, checkElement);
+      }
     });
 
     suite('#switchToApp', function() {
       setup(function(done) {
-        client.apps.switchToApp(appOrigin, done);
+        if (client.isSync) {
+          client.apps.switchToApp(appOrigin);
+          done();
+        } else {
+          client.apps.switchToApp(appOrigin, done);
+        }
       });
 
-      test('it should be inside app', function(done) {
-        function loc() { return window.location.href };
-        client.executeScript(loc, function(err, href) {
+      test('should put us in the app', function(done) {
+        function checkLocation(err, href) {
           assert.ok(href.indexOf(appOrigin) !== -1);
           done();
-        });
+        }
+
+        function loc() {
+          return window.location.href;
+        }
+
+        if (client.isSync) {
+          var href = client.executeScript(loc);
+          checkLocation(null, href);
+        } else {
+          client.executeScript(loc, checkLocation);
+        }
       });
     });
 
     suite('#close', function() {
       setup(function(done) {
-        client.apps.close(appOrigin, done);
+        if (client.isSync) {
+          client.apps.close(appOrigin);
+          done();
+        } else {
+          client.apps.close(appOrigin, done);
+        }
       });
 
-      test('app iframe should be missing', function(done) {
+      test('should get rid of app iframe', function(done) {
         client.setSearchTimeout(10);
-        client.findElement(selector, function(err) {
-          assert.equal(err.type, 'NoSuchElement');
-          done();
-        });
+        if (client.isSync) {
+          try {
+            client.findElement(selector);
+          } catch (err) {
+            assert.strictEqual(err.type, 'NoSuchElement');
+            done();
+          }
+        } else {
+          client.findElement(selector, function(err) {
+            assert.strictEqual(err.type, 'NoSuchElement');
+            done();
+          });
+        }
       });
     });
   });
 
-  suite('#all', function() {
-    var allApps;
+  suite('#list', function() {
+    var apps;
 
     setup(function(done) {
-      client.apps.list(function(err, _allApps) {
-        allApps = _allApps;
+      if (client.isSync) {
+        apps = client.apps.list();
         done();
-      });
+      } else {
+        client.apps.list(function(err, _apps) {
+          apps = _apps;
+          done();
+        });
+      }
     });
 
-    test('has many apps', function() {
-      assert.ok(allApps.length > 0);
+    test('should return many things', function() {
+      assert.notStrictEqual(apps.length, 0);
     });
 
-    test('each app is an instanceof App', function() {
-      allApps.forEach(function(app) {
-        assert.ok(
-          app instanceof App,
-          app.origin
-        );
+    test('should return things and only things that are apps', function() {
+      apps.forEach(function(app) {
+        assert.ok(app instanceof App, app.origin);
       });
     });
   });
-
 });
