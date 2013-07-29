@@ -1,4 +1,3 @@
-
 var App = require(__dirname + '/../lib/app'),
     Apps = require(__dirname + '/../index');
 
@@ -21,11 +20,9 @@ suite('mgmt', function() {
     var context;
 
     test('should return an array of app objects', function(done) {
-      subject.getAll().onsuccess = function(evt) {
-        // TODO(gareth): Check that the app is launched and that we've
-        // switched context appropriately.
-        assert.ok(evt.target.result.length > 0);
-        evt.target.result.forEach(function(app) {
+      function checkApps(apps) {
+        assert.ok(apps.length > 0);
+        apps.forEach(function(app) {
           assert.ok(app instanceof App);
           assert.equal(typeof(app.installOrigin), 'string');
           assert.ok(app.installOrigin.length > 0);
@@ -36,16 +33,29 @@ suite('mgmt', function() {
           assert.equal(typeof(app.origin), 'string');
           assert.ok(app.origin.length > 0);
         });
+      }
 
+      function onsuccess(evt) {
+        checkApps(evt.target.result);
         done();
       };
+
+      if (client.isSync) {
+        var evt = subject.getAll();
+        checkApps(evt.target.result);
+        done();
+      } else {
+        subject.getAll(null, onsuccess);
+      }
     });
 
     test('should not change client context', function() {
       context = client.context;
-      subject.getAll().onsuccess = function(evt) {
+      var onsuccess = function(evt) {
         assert.strictEqual(client.context, context);
       };
+
+      subject.getAll(null, onsuccess);
     });
   });
 });

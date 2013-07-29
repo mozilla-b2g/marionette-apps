@@ -10,3 +10,4 @@ lint:
 .PHONY: test
 test:
 	./node_modules/.bin/mocha
+	SYNC=true ./node_modules/.bin/mocha

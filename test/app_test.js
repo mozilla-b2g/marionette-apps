@@ -18,7 +18,7 @@ suite('App', function() {
 
     var CALENDAR_URL = 'app://calendar.gaiamobile.org';
     setup(function(done) {
-      client.mozApps.mgmt.getAll().onsuccess = function(evt) {
+      var onsuccess = function(evt) {
         var result = evt.target.result;
         for (var i = 0; i < result.length; i++) {
           var app = result[i];
@@ -30,20 +30,37 @@ suite('App', function() {
           }
         }
       };
+
+      if (client.isSync) {
+        var evt = client.mozApps.mgmt.getAll();
+        onsuccess(evt);
+      } else {
+        client.mozApps.mgmt.getAll(null, onsuccess);
+      }
     });
 
     test('should launch the appropriate app', function(done) {
+      this.timeout(BootWatcher.WAIT_TIME);
+
       /**
        * @param {string} app src for app.
        */
       function checkForApp(app) {
         var selector = 'iframe[src="' + app + '"]';
-        client
+
+        if (client.isSync) {
+          client.setSearchTimeout(BootWatcher.WAIT_TIME);
+          var result = client.findElement(selector);
+          assert.notEqual(result.id, undefined);
+          done();
+        } else {
+          client
             .setSearchTimeout(BootWatcher.WAIT_TIME)
             .findElement(selector, function(err, result) {
               assert.notEqual(result.id, undefined);
               done();
             });
+        }
       }
 
       if (client.context !== 'content') {
