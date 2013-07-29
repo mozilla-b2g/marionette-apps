@@ -10,8 +10,20 @@ suite('list', function() {
 
   setup(function() {
     mockApps = {};
+    mockApps._client = {};
+    mockApps._client.isSync = true;
     mockApps.mgmt = {};
     mockApps.mgmt.getAll = function(onerror, onsuccess) {
+      var result = { target: { result: expected } };
+
+      if (mockApps._client.isSync) {
+        if (simulateError) {
+          throw expectedError;
+        } else {
+          return result;
+        }
+      }
+
       if (simulateError) {
         onerror && onerror({
           target: {
@@ -19,17 +31,32 @@ suite('list', function() {
           }
         });
       } else {
-        onsuccess && onsuccess({
-          target: {
-            result: expected
-          }
-        });
+        onsuccess && onsuccess(result);
       }
     };
   });
 
-  test('onsuccess', function(done) {
+  test('onsuccess sync', function() {
     simulateError = false;
+    mockApps._client.isSync = true;
+    var result = list(mockApps);
+    assert.deepEqual(result, expected);
+  });
+
+  test('onerror sync', function(done) {
+    simulateError = true;
+    mockApps._client.isSync = true;
+    try {
+      list(mockApps);
+    } catch (e) {
+      assert.strictEqual(e.msg, expectedError.msg);
+      done();
+    }
+  });
+
+  test('onsuccess async', function(done) {
+    simulateError = false;
+    mockApps._client.isSync = false;
     list(mockApps, function(err, result) {
       assert.ok(!err);
       assert.deepEqual(result, expected);
@@ -37,8 +64,9 @@ suite('list', function() {
     });
   });
 
-  test('onerror', function(done) {
+  test('onerror async', function(done) {
     simulateError = true;
+    mockApps._client.isSync = false;
     list(mockApps, function(err, result) {
       assert.ok(err);
       assert.deepEqual(err, expectedError);

@@ -18,49 +18,67 @@ suite('public interface', function() {
     var selector = 'iframe[src*="calendar"]';
 
     setup(function(done) {
-      client.apps.launch(appOrigin, done);
+      if (client.isSync) {
+        client.apps.launch(appOrigin);
+        done();
+      } else {
+        client.apps.launch(appOrigin, done);
+      }
     });
 
     test('should create the appropriate app iframe', function(done) {
+      function checkElement(err, el) {
+        assert.ok(!err);
+        assert.ok(!!el);
+        done();
+      }
+
       client.scope({ searchTimeout: 1000 });
       if (client.isSync) {
         var el = client.findElement(selector);
-        assert.ok(!!el);
-        done();
+        checkElement(null, el);
       } else {
-        client.findElement(selector, function(err, el) {
-          assert.ok(!!el);
-          done();
-        });
+        client.findElement(selector, checkElement);
       }
     });
 
     suite('#switchToApp', function() {
       setup(function(done) {
-        client.apps.switchToApp(appOrigin, done);
+        if (client.isSync) {
+          client.apps.switchToApp(appOrigin);
+          done();
+        } else {
+          client.apps.switchToApp(appOrigin, done);
+        }
       });
 
       test('should put us in the app', function(done) {
+        function checkLocation(err, href) {
+          assert.ok(href.indexOf(appOrigin) !== -1);
+          done();
+        }
+
         function loc() {
           return window.location.href;
         }
 
         if (client.isSync) {
           var href = client.executeScript(loc);
-          assert.ok(href.indexOf(appOrigin) !== -1);
-          done();
+          checkLocation(null, href);
         } else {
-          client.executeScript(loc, function(err, href) {
-            assert.ok(href.indexOf(appOrigin) !== -1);
-            done();
-          });
+          client.executeScript(loc, checkLocation);
         }
       });
     });
 
     suite('#close', function() {
       setup(function(done) {
-        client.apps.close(appOrigin, done);
+        if (client.isSync) {
+          client.apps.close(appOrigin);
+          done();
+        } else {
+          client.apps.close(appOrigin, done);
+        }
       });
 
       test('should get rid of app iframe', function(done) {
@@ -86,14 +104,19 @@ suite('public interface', function() {
     var apps;
 
     setup(function(done) {
-      client.apps.list(function(err, _apps) {
-        apps = _apps;
+      if (client.isSync) {
+        apps = client.apps.list();
         done();
-      });
+      } else {
+        client.apps.list(function(err, _apps) {
+          apps = _apps;
+          done();
+        });
+      }
     });
 
     test('should return many things', function() {
-      assert.ok(apps.length > 0);
+      assert.notStrictEqual(apps.length, 0);
     });
 
     test('should return things and only things that are apps', function() {

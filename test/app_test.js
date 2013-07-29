@@ -31,10 +31,17 @@ suite('App', function() {
         }
       };
 
-      client.mozApps.mgmt.getAll(null, onsuccess);
+      if (client.isSync) {
+        var evt = client.mozApps.mgmt.getAll();
+        onsuccess(evt);
+      } else {
+        client.mozApps.mgmt.getAll(null, onsuccess);
+      }
     });
 
     test('should launch the appropriate app', function(done) {
+      this.timeout(BootWatcher.WAIT_TIME);
+
       /**
        * @param {string} app src for app.
        */
