@@ -13,17 +13,26 @@ suite('public interface', function() {
     client = this.client;
   });
 
-  suite('after launching app', function() {
-    var appOrigin = 'app://calendar.gaiamobile.org',
-        selector = 'iframe[src*="calendar"]';
+  suite('#launch', function() {
+    var appOrigin = 'app://calendar.gaiamobile.org';
+    var selector = 'iframe[src*="calendar"]';
 
     setup(function(done) {
       client.apps.launch(appOrigin, done);
     });
 
-    test('it has element', function(done) {
-      client.scope({ searchTimeout: 1000 }).
-             findElement(selector, done);
+    test('should create the appropriate app iframe', function(done) {
+      client.scope({ searchTimeout: 1000 });
+      if (client.isSync) {
+        var el = client.findElement(selector);
+        assert.ok(!!el);
+        done();
+      } else {
+        client.findElement(selector, function(err, el) {
+          assert.ok(!!el);
+          done();
+        });
+      }
     });
 
     suite('#switchToApp', function() {
@@ -31,12 +40,21 @@ suite('public interface', function() {
         client.apps.switchToApp(appOrigin, done);
       });
 
-      test('it should be inside app', function(done) {
-        function loc() { return window.location.href };
-        client.executeScript(loc, function(err, href) {
+      test('should put us in the app', function(done) {
+        function loc() {
+          return window.location.href;
+        }
+
+        if (client.isSync) {
+          var href = client.executeScript(loc);
           assert.ok(href.indexOf(appOrigin) !== -1);
           done();
-        });
+        } else {
+          client.executeScript(loc, function(err, href) {
+            assert.ok(href.indexOf(appOrigin) !== -1);
+            done();
+          });
+        }
       });
     });
 
@@ -45,38 +63,43 @@ suite('public interface', function() {
         client.apps.close(appOrigin, done);
       });
 
-      test('app iframe should be missing', function(done) {
+      test('should get rid of app iframe', function(done) {
         client.setSearchTimeout(10);
-        client.findElement(selector, function(err) {
-          assert.equal(err.type, 'NoSuchElement');
-          done();
-        });
+        if (client.isSync) {
+          try {
+            client.findElement(selector);
+          } catch (err) {
+            assert.strictEqual(err.type, 'NoSuchElement');
+            done();
+          }
+        } else {
+          client.findElement(selector, function(err) {
+            assert.strictEqual(err.type, 'NoSuchElement');
+            done();
+          });
+        }
       });
     });
   });
 
   suite('#list', function() {
-    var allApps;
+    var apps;
 
     setup(function(done) {
-      client.apps.list(function(err, _allApps) {
-        allApps = _allApps;
+      client.apps.list(function(err, _apps) {
+        apps = _apps;
         done();
       });
     });
 
-    test('has many apps', function() {
-      assert.ok(allApps.length > 0);
+    test('should return many things', function() {
+      assert.ok(apps.length > 0);
     });
 
-    test('each app is an instanceof App', function() {
-      allApps.forEach(function(app) {
-        assert.ok(
-          app instanceof App,
-          app.origin
-        );
+    test('should return things and only things that are apps', function() {
+      apps.forEach(function(app) {
+        assert.ok(app instanceof App, app.origin);
       });
     });
   });
-
 });
