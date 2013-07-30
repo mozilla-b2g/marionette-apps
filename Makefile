@@ -7,7 +7,13 @@ lint:
 		--disable "220,225" \
 		--exclude_directories "b2g,examples,node_modules"
 
-.PHONY: test
-test:
-	./node_modules/.bin/mocha
+.PHONY: test-sync
+test-sync:
 	SYNC=true ./node_modules/.bin/mocha
+
+.PHONY: test-async
+test-async:
+	./node_modules/.bin/mocha
+
+.PHONY: test
+test: test-sync test-async
