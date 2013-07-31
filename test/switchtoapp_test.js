@@ -1,18 +1,9 @@
 suite('launch', function() {
   // requires
-  var Apps = require('../lib/apps'),
-      switchToApp = require('../lib/switchtoapp').switchToApp;
+  var switchToApp = require('../lib/switchtoapp').switchToApp;
 
-  var apps, client;
-  Helper.client({
-    plugins: {
-      mozApps: require('../lib/apps')
-    }
-  });
-
-  setup(function() {
-    client = this.client;
-  });
+  var client = createClient();
+  marionette.plugin('mozApps', require('../lib/apps'));
 
   suite('switch to running app', function() {
     var domain = 'homescreen.gaiamobile.org';

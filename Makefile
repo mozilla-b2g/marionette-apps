@@ -1,3 +1,9 @@
+TESTS?=$(shell find test -name *_test.js)
+REPORTER?=spec
+MOCHA_OPTS=--reporter $(REPORTER) \
+					 --profile-base $(PWD)/profile.js \
+					 $(TESTS)
+
 .PHONY: default
 default: lint test
 
@@ -9,11 +15,11 @@ lint:
 
 .PHONY: test-sync
 test-sync:
-	SYNC=true ./node_modules/.bin/mocha
+	SYNC=true ./node_modules/.bin/marionette-mocha $(MOCHA_OPTS)
 
 .PHONY: test-async
 test-async:
-	./node_modules/.bin/mocha
+	./node_modules/.bin/marionette-mocha $(MOCHA_OPTS)
 
 .PHONY: test
 test: test-sync test-async

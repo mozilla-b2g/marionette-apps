@@ -1,17 +1,8 @@
 var App = require('../lib/app');
 
-suite('public interface', function() {
-  // requires
-  var apps, client, b2g;
-  Helper.client({
-    plugins: {
-      apps: require('../index')
-    }
-  });
-
-  setup(function() {
-    client = this.client;
-  });
+marionette('public interface', function() {
+  var client = createClient();
+  marionette.plugin('apps', require('../index'));
 
   suite('#launch', function() {
     var appOrigin = 'app://calendar.gaiamobile.org';
