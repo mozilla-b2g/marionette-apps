@@ -7,6 +7,9 @@ MOCHA_OPTS=--reporter $(REPORTER) \
 .PHONY: default
 default: lint test
 
+b2g:
+	./node_modules/.bin/mozilla-download --verbose --product b2g $@
+
 .PHONY: lint
 lint:
 	gjslint  --recurse . \
@@ -22,4 +25,4 @@ test-async:
 	./node_modules/.bin/marionette-mocha $(MOCHA_OPTS)
 
 .PHONY: test
-test: test-sync test-async
+test: b2g test-sync test-async
