@@ -1,18 +1,9 @@
 suite('waitforapp', function() {
   // requires
-  var Apps = require('../lib/apps'),
-      waitForApp = require('../lib/waitforapp').waitForApp;
+  var waitForApp = require('../lib/waitforapp').waitForApp;
 
-  var apps, client, b2g;
-  Helper.client({
-    plugins: {
-      mozApps: require('../lib/apps')
-    }
-  });
-
-  setup(function() {
-    client = this.client;
-  });
+  var client = createClient();
+  marionette.plugin('mozApps', require('../lib/apps'));
 
   suite('waiting for running app', function() {
     var domain = 'homescreen.gaiamobile.org';

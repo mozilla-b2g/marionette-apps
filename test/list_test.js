@@ -1,6 +1,5 @@
 var list = require('../lib/list').list;
 
-
 suite('list', function() {
   var mockApps, simulateError;
   var expected = ['Not', 'an', 'ambi', 'turner'];

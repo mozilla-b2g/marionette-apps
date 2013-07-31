@@ -2,18 +2,10 @@ suite('close', function() {
   // requires
   var Apps = require('../lib/apps'),
       close = require('../lib/close').close,
-      launch = require('../lib/launch').launch;
+      launch = require('../lib/launch').launch,
+      client = createClient();
 
-  var apps, client, b2g;
-  Helper.client({
-    plugins: {
-      mozApps: require('../lib/apps')
-    }
-  });
-
-  setup(function() {
-    client = this.client;
-  });
+  marionette.plugin('mozApps', Apps);
 
   suite('close app', function() {
     var domain = 'calendar.gaiamobile.org';
@@ -22,11 +14,11 @@ suite('close', function() {
 
     setup(function(done) {
       this.timeout('10s');
-      launch(this.client.mozApps, origin, done);
+      launch(client.mozApps, origin, done);
     });
 
     setup(function(done) {
-      close(this.client.mozApps, origin, done);
+      close(client.mozApps, origin, done);
     });
 
     test('iframe is gone', function(done) {

@@ -3,16 +3,12 @@ var App = require(__dirname + '/../lib/app'),
 
 
 suite('mgmt', function() {
-  var apps, b2g, client, subject;
+  var subject;
 
-  Helper.client({
-    plugins: {
-      mozApps: require('../lib/apps')
-    }
-  });
+  var client = createClient();
+  marionette.plugin('mozApps', require('../lib/apps'));
 
   setup(function() {
-    client = this.client;
     subject = client.mozApps.mgmt;
   });
 
