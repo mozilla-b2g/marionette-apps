@@ -1,3 +1,6 @@
+# 0.3.0
+  - sync api support.
+
 # 0.2.0
   - new public api: launch, close, switchToApp, list
 
