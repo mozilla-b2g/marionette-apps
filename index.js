@@ -1,4 +1,5 @@
-var Apps = require('./lib/apps');
+var App = require('./lib/app'),
+    Apps = require('./lib/apps');
 
 
 /**
@@ -37,4 +38,5 @@ function setup(client, options) {
   return new MarionetteApps(apps);
 }
 
+module.exports.App = App;
 module.exports.setup = setup;

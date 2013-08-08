@@ -1,11 +1,12 @@
-var App = require('../lib/app');
+var App = require('../lib/app'),
+    MarionetteApps = require('../index');
 
 suite('public interface', function() {
   // requires
   var apps, client, b2g;
   Helper.client({
     plugins: {
-      apps: require('../index')
+      apps: MarionetteApps
     }
   });
 
@@ -124,5 +125,10 @@ suite('public interface', function() {
         assert.ok(app instanceof App, app.origin);
       });
     });
+  });
+
+  test('should expose App', function() {
+    var app = new MarionetteApps.App(null /** client */);
+    assert.ok(app instanceof MarionetteApps.App);
   });
 });
