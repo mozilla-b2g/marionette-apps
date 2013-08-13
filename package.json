@@ -5,15 +5,15 @@
     "name": "Gareth Aye",
     "email": "gaye@mozilla.com"
   },
-
   "devDependencies": {
-    "marionette-client": "0.10.0",
+    "marionette-client": "~0.12.0",
     "marionette-host-environment": "0.3.3",
     "marionette-js-logger": "0.0.2",
+    "mozilla-download": "~0.2.1",
     "mocha": "1.11.0",
-    "sinon": "1.7.2"
+    "sinon": "1.7.2",
+    "marionette-js-runner": "~0.0.1"
   },
-
   "keywords": [
     "firefox",
     "firefox os",
@@ -22,13 +22,10 @@
     "mozilla",
     "test"
   ],
-
   "scripts": {
     "test": "make"
   },
-
   "license": "MIT",
-
   "repository": {
     "type": "git",
     "url": "https://github.com/mozilla-b2g/marionette-apps.git"

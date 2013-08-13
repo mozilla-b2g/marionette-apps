@@ -1,17 +1,10 @@
 var BootWatcher = require('../lib/bootwatcher');
 
 suite('App', function() {
-  var client, subject;
+  var subject;
+  var client = createClient();
 
-  Helper.client({
-    plugins: {
-      mozApps: require('../lib/apps')
-    }
-  });
-
-  setup(function() {
-    client = this.client;
-  });
+  marionette.plugin('mozApps', require('../lib/apps'));
 
   suite('#launch', function() {
     var context;

@@ -1,17 +1,10 @@
 var Apps = require('../lib/apps');
 
 suite('Apps', function() {
-  var client, subject;
+  var client = createClient();
+  var subject;
 
-  Helper.client({
-    plugins: {
-      mozApps: require('../lib/apps')
-    }
-  });
-
-  setup(function() {
-    client = this.client;
-  });
+  marionette.plugin('mozApps', require('../lib/apps'));
 
   suite('#setup', function() {
     var apps;
