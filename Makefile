@@ -1,7 +1,6 @@
 TESTS?=$(shell find test -name *_test.js)
 REPORTER?=spec
 MOCHA_OPTS=--reporter $(REPORTER) \
-					 --profile-base $(PWD)/profile.js \
 					 $(TESTS)
 
 .PHONY: default
@@ -13,7 +12,7 @@ b2g:
 .PHONY: lint
 lint:
 	gjslint  --recurse . \
-		--disable "220,225" \
+		--disable "210,217,220,225,0212" \
 		--exclude_directories "b2g,examples,node_modules"
 
 .PHONY: test-sync

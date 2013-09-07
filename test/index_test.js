@@ -116,4 +116,25 @@ marionette('public interface', function() {
       });
     });
   });
+
+  suite('#getApp', function() {
+    var app;
+    var origin = 'app://calendar.gaiamobile.org';
+
+    setup(function(done) {
+      if (client.isSync) {
+        app = client.apps.getApp(origin);
+        done();
+      } else {
+        client.apps.getApp(origin, function(err, _app) {
+          app = _app;
+          done(err);
+        });
+      }
+    });
+
+    test('should return app object', function() {
+      assert.equal(app.origin, origin);
+    });
+  });
 });

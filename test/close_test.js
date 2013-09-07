@@ -8,12 +8,10 @@ suite('close', function() {
   marionette.plugin('mozApps', Apps);
 
   suite('close app', function() {
-    var domain = 'calendar.gaiamobile.org';
-    var origin = 'app://' + domain;
+    var origin = 'app://calendar.gaiamobile.org';
     var element;
 
     setup(function(done) {
-      this.timeout('10s');
       launch(client.mozApps, origin, done);
     });
 
@@ -23,7 +21,40 @@ suite('close', function() {
 
     test('iframe is gone', function(done) {
       client.setSearchTimeout(100);
-      client.findElement('iframe[src*="' + domain + '"]', function(err, el) {
+      client.findElement('iframe[src*="' + origin + '"]', function(err, el) {
+        assert.ok(err, 'has error');
+        assert.equal(err.type, 'NoSuchElement', 'element is missing');
+        done();
+      });
+    });
+  });
+
+  suite('close entrypoint app', function() {
+    var origin = 'app://communications.gaiamobile.org';
+
+    // launch some other entrypoint
+    setup(function(done) {
+      launch(client.mozApps, origin, 'ftu', done);
+    });
+
+    // launch contacts (which we will close later)
+    var contacts;
+    setup(function(done) {
+      launch(client.mozApps, origin, 'contacts', function(err, app) {
+        contacts = app;
+        done(err);
+      });
+    });
+
+    setup(function(done) {
+      close(client.mozApps, origin, 'contacts', done);
+    });
+
+    test('closes right app', function(done) {
+      var source = origin + '/' + contacts.entrypoint.details.launch_path;
+
+      client.setSearchTimeout(100);
+      client.findElement('iframe[src*="' + source + '"]', function(err, el) {
         assert.ok(err, 'has error');
         assert.equal(err.type, 'NoSuchElement', 'element is missing');
         done();

@@ -11,8 +11,11 @@ suite('App', function() {
 
     var CALENDAR_URL = 'app://calendar.gaiamobile.org';
     setup(function(done) {
-      var onsuccess = function(evt) {
-        var result = evt.target.result;
+      client.mozApps.mgmt.getAll(function(err, result) {
+        if (err) {
+          return done(err);
+        }
+
         for (var i = 0; i < result.length; i++) {
           var app = result[i];
           if (app.origin === CALENDAR_URL) {
@@ -22,14 +25,7 @@ suite('App', function() {
             done();
           }
         }
-      };
-
-      if (client.isSync) {
-        var evt = client.mozApps.mgmt.getAll();
-        onsuccess(evt);
-      } else {
-        client.mozApps.mgmt.getAll(null, onsuccess);
-      }
+      });
     });
 
     test('should launch the appropriate app', function(done) {

@@ -1,5 +1,5 @@
 suite('launch', function() {
-  // requires
+  var launch = require('../lib/launch').launch;
   var switchToApp = require('../lib/switchtoapp').switchToApp;
 
   var client = createClient();
@@ -34,6 +34,34 @@ suite('launch', function() {
         done();
       });
     });
+  });
+
+  suite('entrypoint', function() {
+    var origin = 'app://communications.gaiamobile.org';
+    var entrypoint = 'contacts';
+    var app;
+
+    setup(function(done) {
+      launch(client.mozApps, origin, entrypoint, function(err, _app) {
+        app = _app;
+        done(err);
+      });
+    });
+
+    setup(function(done) {
+      switchToApp(client.mozApps, origin, entrypoint, done);
+    });
+
+    test('context of marionette after switch', function(done) {
+      client.getUrl(function(err, url) {
+        assert.ok(
+          url.indexOf(app.source) !== -1,
+          'url contains: ' + app.source
+        );
+        done(err);
+      });
+    });
+
   });
 });
 
