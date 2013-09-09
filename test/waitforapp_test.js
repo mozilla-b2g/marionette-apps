@@ -7,7 +7,7 @@ suite('waitforapp', function() {
 
   suite('waiting for running app', function() {
     var domain = 'homescreen.gaiamobile.org';
-    var origin = 'app://' + domain;
+    var source = 'app://' + domain;
     var element;
 
     setup(function(done) {

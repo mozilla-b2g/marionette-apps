@@ -24,22 +24,30 @@ client.plugin('apps', require('marionette-apps'));
 
 client.startSession(function() {
   // launch the app
-  client.apps.launch('app://myorigin.com', function(err) {
-  });
+  client.apps.launch('app://myorigin.com'); 
+
+  // entrypoint variant
+  client.apps.launch('app://myorigin.com', 'xfoo'); 
 
   // close a running application
-  client.apps.close('app://myorigin.com', function(err) {
-  });
+  client.apps.close('app://myorigin.com');
+
+  // entrypoint variant
+  client.apps.close('app://myorigin.com', 'xfoo');
 
   // switch to the iframe of a given app origin  should run after launch
-  client.apps.switchToApp('app://myorigin.com', function() {
-  });
-
+  client.apps.switchToApp('app://myorigin.com');
+  // entrypoint variant
+  client.apps.switchToApp('app://myorigin.com', 'xfoo');
 
   // find all apps
-  client.apps.list(function(err, apps) {
-   // an array of apps see lib/app.js
-  });
+  var apps = client.apps.list();
+
+  // find a single app
+  var app = client.app.getApp('app://...');
+  // entrypoint variant
+  var appPoint = client.app.getApp('app://', 'entrypoint');
+
 });
 
 
