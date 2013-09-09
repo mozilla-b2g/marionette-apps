@@ -19,7 +19,7 @@ suite('mgmt', function() {
       function checkApps(apps) {
         assert.ok(apps.length > 0);
         apps.forEach(function(app) {
-          assert.ok(app instanceof App);
+          assert.ok(app instanceof App, 'app instanceof App');
           assert.equal(typeof(app.installOrigin), 'string');
           assert.ok(app.installOrigin.length > 0);
           assert.equal(typeof(app.installTime), 'number');
@@ -28,30 +28,26 @@ suite('mgmt', function() {
           assert.ok(app.manifestURL.length > 0);
           assert.equal(typeof(app.origin), 'string');
           assert.ok(app.origin.length > 0);
+          assert.equal(typeof app.manifest, 'object');
         });
       }
 
-      function onsuccess(evt) {
-        checkApps(evt.target.result);
-        done();
-      };
 
-      if (client.isSync) {
-        var evt = subject.getAll();
-        checkApps(evt.target.result);
+      subject.getAll(function(err, list) {
+        if (err) {
+          return done(err);
+        }
+        checkApps(list);
         done();
-      } else {
-        subject.getAll(null, onsuccess);
-      }
+      });
     });
 
-    test('should not change client context', function() {
+    test('should not change client context', function(done) {
       context = client.context;
-      var onsuccess = function(evt) {
+      subject.getAll(function() {
         assert.strictEqual(client.context, context);
-      };
-
-      subject.getAll(null, onsuccess);
+        done();
+      });
     });
   });
 });
