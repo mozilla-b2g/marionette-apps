@@ -1,5 +1,6 @@
 suite('getapp', function() {
   var getApp = require('../lib/getapp').getApp;
+  var sourceForEntrypoint = require('../lib/getapp').sourceForEntrypoint;
 
   marionette.plugin('mozApps', require('../lib/apps'));
   var client = createClient();
@@ -19,6 +20,26 @@ suite('getapp', function() {
     getApp(client.mozApps, origin, function(err) {
       assert.ok(err, 'has error');
       assert.ok(err.message.match(origin, 'has correct type of error'));
+      done();
+    });
+  });
+
+  test('sourceForEntrypoint does not escape hash', function(done) {
+    var source = sourceForEntrypoint({
+      origin: 'http://mozilla.org',
+      entrypoint: {
+        details: {
+          launch_path: 'omfg#bbq'
+        }
+      }
+    });
+    assert.equal(source, 'http://mozilla.org/omfg#bbq');
+
+    var origin = 'app://communications.gaiamobile.org';
+    var entryPoint = 'dialer';
+
+    getApp(client.mozApps, origin, entryPoint, function(err, app) {
+      assert.notEqual(app.source.indexOf('#'), -1, 'source');
       done();
     });
   });
