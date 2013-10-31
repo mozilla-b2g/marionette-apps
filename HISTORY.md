@@ -1,3 +1,5 @@
+# 0.3.3
+  - fix bug where # char is escaped in entrypoints incorrectly.
 # 0.3.0
   - sync api support.
 
