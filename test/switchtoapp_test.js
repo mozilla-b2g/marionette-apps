@@ -2,7 +2,18 @@ suite('launch', function() {
   var launch = require('../lib/launch').launch;
   var switchToApp = require('../lib/switchtoapp').switchToApp;
 
-  var client = createClient();
+  var profile = {
+    settings: {
+      'ftu.manifestURL': null,
+      'lockscreen.enabled': false
+    },
+    // Need this so that swithToApp can also focus on the app frame.
+    prefs: {
+      'focusmanager.testmode': true
+    }
+  };
+
+  var client = createClient(profile);
   marionette.plugin('mozApps', require('../lib/apps'));
 
   suite('switch to running app', function() {
@@ -27,6 +38,17 @@ suite('launch', function() {
     test('app should be the target of scripts', function(done) {
       function remote() {
         return window.wrappedJSObject.location.href;
+      }
+
+      client.executeScript(remote, function(err, result) {
+        assert.ok(result);
+        done();
+      });
+    });
+
+    test('app should have the focus', function(done) {
+      function remote() {
+        return window.wrappedJSObject.document.hasFocus();
       }
 
       client.executeScript(remote, function(err, result) {
