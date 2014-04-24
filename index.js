@@ -1,5 +1,6 @@
 var Apps = require('./lib/apps');
 
+/*  test */
 
 /**
  * @constructor
