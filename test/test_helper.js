@@ -10,17 +10,19 @@ global.sinon = require('sinon');
 
 /**
  * wrapper for marionette.client but with async/sync switching.
- *
+ * @param {Object} [profile] A custom profile for creating the client.
  * @return {Marionette.Client} client instance.
  */
-global.createClient = function() {
+global.createClient = function(profile) {
   // profile
-  var profile = {
-    settings: {
-      'ftu.manifestURL': null,
-      'lockscreen.enabled': false
-    }
+  var defaultProfile = {
+      settings: {
+        'ftu.manifestURL': null,
+        'lockscreen.enabled': false
+      }
   };
+
+  profile = profile || defaultProfile;
 
   var Driver = (process.env.SYNC) ?
                  Marionette.Drivers.TcpSync :
