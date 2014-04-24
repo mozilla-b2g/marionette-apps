@@ -11,7 +11,7 @@ suite('waitforapp', function() {
     var element;
 
     setup(function(done) {
-      this.timeout('10s');
+      this.timeout('20s');
       waitForApp(client.mozApps, domain, function(err, el) {
         if (err) return done(err);
         element = el;
