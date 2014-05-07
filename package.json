@@ -11,10 +11,11 @@
     "mozilla-download": "~0.2.1",
     "mocha": "1.11.0",
     "sinon": "1.7.2",
-    "marionette-js-runner": "~0.2.0"
+    "marionette-js-runner": "~0.4.3",
+    "marionette-settings-api": "~0.1.0"
   },
   "peerDependencies": {
-    "marionette-client": ">=1.1.6"
+    "marionette-client": ">=1.1.7"
   },
   "keywords": [
     "firefox",
