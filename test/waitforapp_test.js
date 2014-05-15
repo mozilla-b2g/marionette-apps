@@ -28,8 +28,35 @@ suite('waitforapp', function() {
       });
     });
 
+    test('iframe is with the render class', function(done) {
+      client.findElement('iframe[src*="' + domain + '"]', function(err, el) {
+        el.scriptWith(
+          function(el) {
+            return el.parentNode.getAttribute('class');
+          },
+          function(err, value) {
+            assert.ok(value.indexOf('render') !== -1);
+            done();
+          }
+        );
+      });
+    });
+
+    test('the transition-state of the iframe is opened', function(done) {
+      client.findElement('iframe[src*="' + domain + '"]', function(err, el) {
+        el.scriptWith(
+          function(el) {
+            return el.parentNode.getAttribute('transition-state');
+          },
+          function(err, value) {
+            assert.equal(value, 'opened');
+            done();
+          }
+        );
+      });
+    });
+
     test('iframe is visible', function(done) {
-      var iframe;
       client.findElement('iframe[src*="' + domain + '"]', function(err, el) {
         el.displayed(function(err, displayed) {
           assert.ok(displayed);
