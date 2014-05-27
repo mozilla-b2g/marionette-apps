@@ -34,7 +34,7 @@ suite('close', function() {
 
     // launch some other entrypoint
     setup(function(done) {
-      launch(client.mozApps, origin, 'ftu', done);
+      launch(client.mozApps, origin, 'dialer', done);
     });
 
     // launch contacts (which we will close later)
