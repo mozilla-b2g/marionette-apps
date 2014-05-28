@@ -11,20 +11,30 @@ suite('close', function() {
     var origin = 'app://calendar.gaiamobile.org';
     var element;
 
-    setup(function(done) {
-      launch(client.mozApps, origin, done);
-    });
-
-    setup(function(done) {
-      close(client.mozApps, origin, done);
-    });
-
-    test('iframe is gone', function(done) {
+    setup(function() {
       client.setSearchTimeout(100);
+      launch(client.mozApps, origin);
+    });
+
+    test('when it is on foreground', function() {
+      close(client.mozApps, origin);
+
       client.findElement('iframe[src*="' + origin + '"]', function(err, el) {
         assert.ok(err, 'has error');
         assert.equal(err.type, 'NoSuchElement', 'element is missing');
-        done();
+      });
+    });
+
+    test('when it is on background', function() {
+      // Go to homescreen, and calendar app will be on background.
+      client.executeScript(function() {
+        window.wrappedJSObject.dispatchEvent(new CustomEvent('home'));
+      });
+      close(client.mozApps, origin);
+
+      client.findElement('iframe[src*="' + origin + '"]', function(err, el) {
+        assert.ok(err, 'has error');
+        assert.equal(err.type, 'NoSuchElement', 'element is missing');
       });
     });
   });
