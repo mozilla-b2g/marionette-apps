@@ -76,11 +76,11 @@ suite('launch', function() {
     suite('success', function() {
       // launch another app with this domain first to verify we can actually
       // pick the right one.
-      var ftu = launchApp('ftu');
+      var dialer = launchApp('dialer');
       var contacts = launchApp('contacts');
 
       test('is launched to entrypoint', function(done) {
-        assert.ok(!ftu.error, 'other app launched');
+        assert.ok(!dialer.error, 'other app launched');
         var entrypoint = app.manifest.entry_points.contacts;
 
         // switch to new iframe
