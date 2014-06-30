@@ -6,7 +6,7 @@ suite('waitforapp', function() {
   marionette.plugin('mozApps', require('../lib/apps'));
 
   suite('waiting for running app', function() {
-    var domain = 'homescreen.gaiamobile.org';
+    var domain = 'verticalhome.gaiamobile.org';
     var source = 'app://' + domain;
     var element;
 
