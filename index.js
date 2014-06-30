@@ -1,3 +1,6 @@
+// Polyfill Array.prototype.find.
+require('./lib/find');
+
 var Apps = require('./lib/apps');
 
 
