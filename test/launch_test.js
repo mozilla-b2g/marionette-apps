@@ -7,6 +7,21 @@ suite('launch', function() {
   marionette.plugin('mozApps', require('../lib/apps'));
 
   suite('launch installed app', function() {
+
+    function waitForVisibility(iframe, callback) {
+      iframe.displayed(function(err, isDisplayed) {
+        if (err) return callback(err);
+        if (isDisplayed)
+          return callback();
+
+        setTimeout(waitForVisibility, 250, iframe, callback);
+      });
+    }
+
+    function getAppFrame(origin, callback) {
+      client.findElement('iframe[src*="' + origin + '"]', callback);
+    }
+
     var origin = 'app://calendar.gaiamobile.org';
     setup(function(done) {
       launch(client.mozApps, origin, done);
@@ -15,7 +30,7 @@ suite('launch', function() {
     // find iframe
     var iframe;
     setup(function(done) {
-      client.findElement('iframe[src*="' + origin + '"]', function(err, el) {
+      getAppFrame(origin, function(err, el) {
         iframe = el;
         done(err);
       });
@@ -30,17 +45,21 @@ suite('launch', function() {
       /**
        * Wait until iframe is visible.
        */
-      function waitForVisibility(callback) {
-        iframe.displayed(function(err, isDisplayed) {
-          if (err) return callback(err);
-          if (isDisplayed)
-            return callback();
 
-          setTimeout(waitForVisibility, 250, callback);
+      waitForVisibility(iframe, done);
+    });
+
+    test('double launch does not timeout', function(done) {
+      client.switchToFrame();
+      launch(client.mozApps, origin, function() {
+        getAppFrame(origin, function(err, el) {
+          if (err) {
+            return done(err);
+          }
+
+          waitForVisibility(el, done);
         });
-      }
-
-      waitForVisibility(done);
+      });
     });
   });
 
