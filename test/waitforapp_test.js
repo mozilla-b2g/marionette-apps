@@ -6,7 +6,7 @@ suite('waitforapp', function() {
   marionette.plugin('mozApps', require('../lib/apps'));
 
   suite('waiting for running app', function() {
-    var domain = 'homescreen.gaiamobile.org';
+    var domain = 'verticalhome.gaiamobile.org';
     var source = 'app://' + domain;
     var element;
 
@@ -46,7 +46,7 @@ suite('waitforapp', function() {
       client.findElement('iframe[src*="' + domain + '"]', function(err, el) {
         el.scriptWith(
           function(el) {
-            return el.parentNode.getAttribute('transition-state');
+            return el.parentNode.parentNode.getAttribute('transition-state');
           },
           function(err, value) {
             assert.equal(value, 'opened');
