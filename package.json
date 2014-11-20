@@ -5,6 +5,9 @@
     "name": "Gareth Aye",
     "email": "gaye@mozilla.com"
   },
+  "peerDependencies": {
+    "marionette-client": "1.1.5"
+  },
   "devDependencies": {
     "marionette-host-environment": "0.3.3",
     "marionette-js-logger": "0.0.2",
