@@ -6,7 +6,7 @@ MOCHA_OPTS=--reporter $(REPORTER) \
 .PHONY: default
 default: lint test
 
-b2g:
+b2g: node_modules
 	./node_modules/.bin/mozilla-download --verbose --product b2g $@
 
 .PHONY: lint
@@ -15,6 +15,10 @@ lint:
 		--disable "210,217,220,225,0212" \
 		--exclude_directories "b2g,examples,node_modules"	
 
+.PHONY: node_modules
+node_modules:
+	npm install
+
 .PHONY: test
-test: b2g
+test: b2g node_modules
 	SYNC=true ./node_modules/.bin/marionette-mocha $(MOCHA_OPTS)
