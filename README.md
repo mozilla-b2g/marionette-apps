@@ -40,6 +40,11 @@ client.startSession(function() {
   // entrypoint variant
   client.apps.switchToApp('app://myorigin.com', 'xfoo');
 
+  // switch to app that is run as inline activity
+  client.apps.switchToActivity('app://activity.myorigin.com');
+  // entrypoint variant
+  client.apps.switchToActivity('app://activity.myorigin.com', 'xfoo');
+
   // find all apps
   var apps = client.apps.list();
 
