@@ -1,8 +1,0 @@
---colors
---growl
---recursive
---require test/test_helper.js
---reporter spec
---timeout 100s
---ui tdd
---profile-base ./profile.js
